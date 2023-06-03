@@ -1,10 +1,9 @@
 .offcanvas-custom {
-    margin-top: 57px; /* Adjust the top value according to the desired space from the top */
+    margin-top: 57px; 
+    position: absolute;
+    z-index: -1000000;
   }
   
-  
-  
-
   .navbar-toggle {
     
     width: 100%;

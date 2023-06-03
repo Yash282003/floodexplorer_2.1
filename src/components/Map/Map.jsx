@@ -90,7 +90,7 @@ const Map = () => {
   }, [])
   return (
     <div
-      style={{ display: 'block', overflow: 'hidden', width: sidebarOpen ? "74.2vw" : "100vw", position: 'absolute', right: '0' }}
+      style={{ display: 'block', zIndex:-1000000000,overflow: 'hidden', width: sidebarOpen ? "74.2vw" : "100vw", position: 'absolute', right: '0' }}
       className='map' id="map">
 
     </div>
