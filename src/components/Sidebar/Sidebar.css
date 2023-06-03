@@ -1,0 +1,107 @@
+.offcanvas-custom {
+    margin-top: 57px; /* Adjust the top value according to the desired space from the top */
+  }
+  
+  
+  
+
+  .navbar-toggle {
+    
+    width: 100%;
+    height: 50px;
+    display: flex;
+    justify-content: space-between;
+    /* flex: start; */
+    align-items: center;
+  }
+  .navbar-toggle button{
+    width: 60%;
+    background-color:rgb(208, 206, 206);
+    border-radius: 6px;
+  }
+  .navbar-toggle button:hover{
+    background-color: rgb(226, 225, 224);
+  }
+  .search_data span{
+    display: flex;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: 700;
+  }
+  .search{
+    display: flex;
+    justify-content: center;
+    font-size: 17px;
+  }
+  .datepicker{
+    display: flex;
+    justify-content: center;
+    font-size: 17px;
+  }
+  .datepicker input{
+    width: 350px;
+  } 
+  .search_satellite span{
+    display: flex;
+    justify-content: center;
+    font-size: 17px;
+  }
+  
+  select{
+    border-radius: 6px;
+    background-color: aliceblue;
+  }
+  .dropdown{
+    width: 100%;
+    margin-top: 15px;
+  }
+  .dropdown-btn{
+    width: 100%;
+    height: 33px;
+    background-color: aliceblue;
+    color: black;
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 7px;
+    border-radius: 6px;
+  }
+  .dropdown-content{
+    width: 100%;
+  height: auto;
+    background-color: aliceblue;
+    color: black; 
+    padding: 4px 7px;
+    border-radius: 6px;
+    margin-top: 5px;
+  }
+  .dropdown-item:hover{
+    background-color: rgb(195, 196, 197);
+  
+  }
+  .satellite{
+    margin-top:6px ;
+  }
+  .input{
+    display: flex;
+    flex-direction: column;
+  }
+  .Satellite-info{
+    margin-top: 8px;
+  }
+  #submitbutton{
+   /* margin-left: 20px; */
+   display: flex;
+   justify-content: center;
+   
+   
+  }
+  #submitbutton button{
+    background-color: aliceblue;
+    width: 90%;
+    margin-top: 8px;
+    border-radius: 6px;
+    height: 30px;
+  }
+  #submitbutton button:hover{
+    background-color: rgb(226, 225, 224);
+  }
