@@ -40,7 +40,7 @@ function Sidebar() {
     console.log(queryParams);
   }, [queryParams]);
   const fetchData = async () => {
-    const url = `http://localhost:7000/api/floods/testing8?sDate=2016-04-04&eDate=2017-04-04&CountryName=India&SatelliteName=${
+    const url = `http://localhost:7000/api/floods/testing11?sDate=2016-04-04&eDate=2017-04-04&CountryName=India&SatelliteName=${
       queryParams[0] ? queryParams[0] : ""
     }&SatelliteName1=${queryParams[1] ? queryParams[1] : ""}&SatelliteName2=${
       queryParams[2] ? queryParams[2] : ""
