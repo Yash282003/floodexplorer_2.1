@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { VscChromeClose } from "react-icons/vsc";
 import "./SpecificFlooddata.css";
 import dataContext from "../../context/datacontext";
@@ -6,13 +6,30 @@ import Accordion from "react-bootstrap/Accordion";
 import Table from "react-bootstrap/Table";
 
 function SpecificFlooddata({ flooddata }) {
+  const { modelArrays,setModelArrays } = useContext(dataContext);
   const handlePop = () => {
     setPop(false);
   };
-
+  useEffect(()=>{
+    console.log(modelArrays)
+  },[modelArrays])
   const { pop, setPop } = useContext(dataContext);
+
   console.log(flooddata);
   const { footprint, gsd, epsg_code, item_type } = flooddata;
+
+  const handleFootprintPlotting = (event) => {
+    const { value, checked } = event.target;
+   
+    // Update the state based on checkbox status
+    if (checked) {
+      setModelArrays((prevSelected) => [...prevSelected, value]);
+    } else {
+      setModelArrays((prevSelected) =>
+        prevSelected.filter((checkboxValue) => checkboxValue !== value)
+      );
+    }
+  };
   return (
     <div className="specificFlooddata_modal">
       <div className="modal_content">
@@ -51,9 +68,9 @@ function SpecificFlooddata({ flooddata }) {
                         <td>{e.Longitude}</td>
                       </tr>
                       <tr>
-                        <td>3</td>
+                        <td>3</td>  
                         <td>footprint</td>
-                        <td>{e.footprint}</td>
+                        <td><input type="checkbox" onClick={(e)=>handleFootprintPlotting(e)} value={e.footprint}/>{e.footprint}</td>
                       </tr>
                     </tbody>
                   </Table>

@@ -7,7 +7,9 @@ import 'leaflet/dist/leaflet.css';
 
 const Map = () => {
     const { sidebarOpen } = useContext(dataContext);
-//   const { floodData, setFloodData } = useContext(dataContext);
+    const { floodData, setFloodData } = useContext(dataContext);
+    const { modelArrays,setModelArrays } = useContext(dataContext);
+
 //   const { isSideBarOpen, setIsSideBarOpen } = useContext(dataContext)
 
   const style2 = {
@@ -47,25 +49,29 @@ const Map = () => {
       [29.83900608249045, 77.90231862375538],
 
     ];
-    // floodData?.forEach((e) => {
-    //   const someData = e?.flooddata[0]?.complete_geojson_geometry ? JSON.parse(replaceQuotes(e?.flooddata[0]?.complete_geojson_geometry)) : 
-    //   { 'type': 'FeatureCollection', 'features': [{ 'type': 'Feature', 'properties': {}, 'geometry': { 'type': 'Polygon', 'coordinates':
-    //    [[[84.1898, 24.6099], [86.1898, 24.6099], [86.1898, 26.6099], [84.1898, 26.6099], [84.1898, 24.6099]]] } }] }
-    //   // console.log(someData)
-    //   L.geoJSON(someData).addTo(map);
-    // })
+    
+       modelArrays?.forEach((e)=>{
+      var polygon = L.polygon(JSON.parse(e)[0], { color: 'red' }).addTo(map);
+      console.log(JSON.parse(e))
+      })
+    floodData?.forEach((e) => {
+      const someData = e?.flooddata[0]?.complete_geojson_geometry ? JSON.parse(replaceQuotes(e?.flooddata[0]?.complete_geojson_geometry)) : 
+      { 'type': 'FeatureCollection', 'features': [{ 'type': 'Feature', 'properties': {}, 'geometry': { 'type': 'Polygon', 'coordinates':
+       [[[84.1898, 24.6099], [86.1898, 24.6099], [86.1898, 26.6099], [84.1898, 26.6099], [84.1898, 24.6099]]] } }] }
+      L.geoJSON(someData).addTo(map);
+    })
 
-    // function replaceQuotes(str) {
-    //   var replacedStr = str.replace(/['"]/g, function (match) {
-    //     if (match === '"') {  
-    //       return "'";
-    //     } else {
-    //       return '"';
-    //     }
-    //   });
+    function replaceQuotes(str) {
+      var replacedStr = str.replace(/['"]/g, function (match) {
+        if (match === '"') {  
+          return "'";
+        } else {
+          return '"';
+        }
+      });
 
-    //   return replacedStr;
-    // }
+      return replacedStr;
+    }
 
 
 
@@ -87,10 +93,10 @@ const Map = () => {
 
 
 
-  }, [])
+  }, [modelArrays])
   return (
     <div
-      style={{ display: 'block', zIndex:-1000000000,overflow: 'hidden', width: sidebarOpen ? "74.2vw" : "100vw", position: 'absolute', right: '0' }}
+      style={{ display: 'block', zIndex:-1000,overflow: 'hidden', width: sidebarOpen ? "74.2vw" : "100vw", position: 'absolute', right: '0' }}
       className='map' id="map">
 
     </div>
