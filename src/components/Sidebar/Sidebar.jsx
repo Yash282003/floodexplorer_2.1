@@ -6,7 +6,7 @@ import dataContext from "../../context/datacontext";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import SpecificFlooddata from "../SpecificFlooddata/SpecificFlooddata";
-
+import Weblink from "../Weblink/Weblink";
 function Sidebar() {
   const { sidebarOpen, setSidebarOpen } = useContext(dataContext);
   const [startDate, setStartDate] = useState(null);
@@ -15,15 +15,16 @@ function Sidebar() {
   const [select, setSelect] = useState("Countries");
   const { countryData, setCountryData } = useContext(dataContext);
   const [queryParams, setQueryParams] = useState([]);
-  const { modelArrays,setModelArrays } = useContext(dataContext);
+  const { modelArrays, setModelArrays } = useContext(dataContext);
+  const {weblinksview,setWeblinksView } = useContext(dataContext);
 
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [viewingSection,setViewingSection] = useState("query");
   const [show, setShow] = useState(false);
   const { floodData, setFloodData } = useContext(dataContext);
 
-  const {selectedFlood, setSelectedFlood} = useContext(dataContext);
-  const {pop,setPop}=useContext(dataContext)
-
+  const { selectedFlood, setSelectedFlood } = useContext(dataContext);
+  const { pop, setPop } = useContext(dataContext);
+  
   const Option = [
     "India",
     "Bangladesh",
@@ -39,9 +40,46 @@ function Sidebar() {
     "Vietnam",
     "Laos",
   ];
+  function convertToDateComing(dateString) {
+    var parts = dateString.split("/");
+    var day = parseInt(parts[0], 10);
+    var month = parseInt(parts[1], 10) - 1; // Subtract 1 from month since JavaScript Date object months are zero-based
+    var year = parseInt(parts[2], 10);
+    return new Date(year, month, day);
+  }
+  function convertToDateGoing(dateString){
+    var parts2 = dateString.split("-");
+    var day2 = parseInt(parts2[2], 10);
+  var month2 = parseInt(parts2[1], 10) - 1;
+  var year2 = parseInt(parts2[0], 10);
+  var dateObj2 = new Date(year2, month2, day2);
+  return dateObj2;
+  }
+  
+function filterWeblinkDataByDateRange(data, sd, ed) {
+  console.log(sd,ed)
+    var filteredData = data[0].weblinkdata.filter(function(item) {
+        var itemsd = convertToDateComing(item.start_date);
+        var itemed = convertToDateComing(item.end_date);
+        var rangesd =convertToDateGoing(sd)
+        var rangeed = convertToDateGoing(ed)
+      return itemsd >= rangesd && itemed <= rangeed;
+    });
+    console.log(filteredData)
+    setWeblinksView(filteredData)
+  }
+
+  useEffect(()=>{
+   console.log(weblinksview)
+  },[weblinksview])
   useEffect(() => {
-    console.log(queryParams);
-  }, [queryParams]);
+    const fetchWeblinks= async()=>{
+      const result= await fetch ('http://localhost:7000/weblinks?CountryName=India')
+      const data=await result.json()
+      setWeblinksView(data)
+    }
+    fetchWeblinks()
+  }, []);
   const fetchData = async () => {
     const url = `http://localhost:7000/api/floods/testing8?sDate=2016-04-04&eDate=2017-04-04&CountryName=India&SatelliteName=${
       queryParams[0] ? queryParams[0] : ""
@@ -50,19 +88,22 @@ function Sidebar() {
     }&SatelliteName3=${queryParams[3] ? queryParams[3] : ""}&SatelliteName4=${
       queryParams[4] ? queryParams[4] : ""
     }`;
-    console.log(url);
+
     const data = await fetch(url);
-    console.log("object");
+
     const rep = await data.json();
     console.log(rep);
     setFloodData(rep);
-    setIsSubmitted(true);
+    setViewingSection("data");
+    filterWeblinkDataByDateRange(weblinksview,"2016-04-04","2018-04-04")
   };
   const handleClick = () => {
     fetchData();
     setQueryParams(selectedValues);
   };
-
+  const parseWeblinks=()=>{
+    
+  }
   const handleShow = () => {
     setSidebarOpen(true);
   };
@@ -70,6 +111,7 @@ function Sidebar() {
   const handleClose = () => {
     setSidebarOpen(false);
   };
+
   const handleStartDateChange = (date) => {
     setStartDate(date.target.value);
   };
@@ -85,13 +127,12 @@ function Sidebar() {
   const handleShow1 = (floodName) => {
     console.log(floodName);
     setSelectedFlood(floodName);
-    console.log("hfjhfj")
+    console.log("hfjhfj");
     setPop(true);
-
   };
-  useEffect(()=>{
-      console.log(selectedFlood)
-  },[selectedFlood])
+  useEffect(() => {
+    console.log(selectedFlood);
+  }, [selectedFlood]);
   var selectedValues = [];
   function handleParams(event) {
     var clickedElement = event.target;
@@ -126,13 +167,13 @@ function Sidebar() {
 
     // Do something else with the value if needed
   }
- 
+
   useEffect(() => {
     console.log(selectJson);
   }, [selectJson]);
   return (
     <>
-      {pop ? <SpecificFlooddata flooddata={selectedFlood?.flooddata}/>:<></>}
+      {pop ? <SpecificFlooddata flooddata={selectedFlood?.flooddata} /> : <></>}
       <Offcanvas
         show={sidebarOpen}
         onHide={handleClose}
@@ -142,8 +183,15 @@ function Sidebar() {
       >
         <Offcanvas.Header closeButton></Offcanvas.Header>
         <Offcanvas.Body>
-          {isSubmitted ? (
-            <>
+        <li className="navbar-toggle">
+                  <button onClick={()=>setViewingSection("query")}>Query</button>
+
+                  <button onClick={()=>setViewingSection("data")}>Data</button>
+
+                  <button onClick={()=>setViewingSection("links")}>Links</button>
+                </li>
+
+              {viewingSection==="data" && <>
               <ul className="nav-menu-items">
                 {floodData.length > 1 ? (
                   floodData.map((element, index) => (
@@ -161,36 +209,12 @@ function Sidebar() {
                   <div style={{ color: "black" }}>No data available</div>
                 )}
               </ul>
-              
-                
-              
-              {/* <Modal show={show} onHide={handleClose1}>
-        <Modal.Header closeButton>
-          <Modal.Title>Modal heading</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>{selectedFlood?.flooddata.map((e)=>{
-          return <SpecificFlooddata flooddata={e}/>
-        })}</Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose1}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={handleClose1}>
-            Save Changes
-          </Button>
-        </Modal.Footer>
-      </Modal> */}
-            </>
-          ) : (
+              </>
+               }
+          {viewingSection ==="query" && 
             <>
               <ul className="nav-menu-items">
-                <li className="navbar-toggle">
-                  <button>Query</button>
-
-                  <button>Data</button>
-
-                  <button>Links</button>
-                </li>
+               
 
                 <div className="search_data">
                   <span>Search Flood Data</span>
@@ -328,42 +352,19 @@ function Sidebar() {
                     Submit
                   </button>
                 </div>
-                {/* {floodData.map((nested) =>
-              nested.flooddata.map((element) => {
-                return (
-                  <>
-                    <input
-                      type="checkbox"
-                      onClick={(e) => {
-                        handleGeoJSON(e);
-                      }}
-                      name={element.footprint}
-                      value={element.field1 ? element.field1 : "what"}
-                    />
-                    {element.field1} <br />
-                  </>
-                );
-              })
-            )} */}
-                {/* {floodData?.length > 1 ? (
-              floodData.map((e, index) => {
-                return (
-                  <>
-                    <ul>
-                      <li key={e.id}>
-                        <div>{e.CountryName}</div>
-                        <div>{e.floodname}</div>
-                      </li>
-                    </ul>
-                  </>
-                );
-              })
-            ) : (
-              <div style={{ color: "black" }}>Loading ...</div>
-            )} */}
               </ul>
-            </>
-          )}
+            </>}
+
+              {viewingSection ==="links" && <>
+              {
+                weblinksview?.map((e)=>{
+                  return <>
+                  <a href={e.weblink} target="_blank" rel="noopener noreferrer">{e.weblink}</a>
+                  
+                  </>
+                })
+              }
+              </>}
         </Offcanvas.Body>
       </Offcanvas>
     </>

@@ -4,6 +4,7 @@ const ContextProvider = (props) => {
     // const [isSideBarOpen,setIsSideBarOpen]=useState(false)
     // const [countryData,setCountryData]= useState(null)
     const [floodData,setFloodData]=useState([])
+    const [weblinksview,setWeblinksView]=useState([])
     // const [queryParams,setQueryParams]=useState([])
     const [modelArrays,setModelArrays]= useState([]);
     const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -11,7 +12,7 @@ const ContextProvider = (props) => {
     const[pop, setPop]=useState(false)
       return (
         <div>
-          <dataContext.Provider value={{ modelArrays,setModelArrays,floodData,setFloodData,sidebarOpen, setSidebarOpen,selectedFlood, setSelectedFlood,pop, setPop }} >
+          <dataContext.Provider value={{weblinksview,setWeblinksView, modelArrays,setModelArrays,floodData,setFloodData,sidebarOpen, setSidebarOpen,selectedFlood, setSelectedFlood,pop, setPop }} >
             {props.children}
           </dataContext.Provider>
         </div>
