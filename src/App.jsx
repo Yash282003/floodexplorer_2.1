@@ -6,7 +6,7 @@ function App() {
   return (
     <div>
       <ContextProvider>
-        <Twitter/>
+        <Home/>
       </ContextProvider>
     </div>
   );

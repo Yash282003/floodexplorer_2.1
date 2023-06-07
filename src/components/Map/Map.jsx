@@ -34,7 +34,7 @@ const Map = () => {
       //maxBounds: bounds,   // Then add it here..
 
 
-    }).setView([22.9074872, 79.07306671], 13);
+    }).setView([22.9074872, 79.07306671], 5);
     var googleHybrid = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 10,
       subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
@@ -51,8 +51,12 @@ const Map = () => {
     ];
     
        modelArrays?.forEach((e)=>{
-      var polygon = L.polygon(JSON.parse(e)[0], { color: 'red' }).addTo(map);
-      console.log(JSON.parse(e))
+         var reversedCoordinates = JSON.parse(e)[0].map(function(coord) {
+           return [coord[1], coord[0]];
+         });
+      var polygon = L.polygon(reversedCoordinates, { color: 'red' }).addTo(map);
+      console.log(JSON.parse(e)[0])
+      console.log(reversedCoordinates)
       })
     floodData?.forEach((e) => {
       const someData = e?.flooddata[0]?.complete_geojson_geometry ? JSON.parse(replaceQuotes(e?.flooddata[0]?.complete_geojson_geometry)) : 
@@ -93,7 +97,7 @@ const Map = () => {
 
 
 
-  }, [modelArrays])
+  }, [modelArrays,floodData])
   return (
     <div
       style={{ display: 'block', zIndex:-1000,overflow: 'hidden', width: sidebarOpen ? "74.2vw" : "100vw", position: 'absolute', right: '0' }}
