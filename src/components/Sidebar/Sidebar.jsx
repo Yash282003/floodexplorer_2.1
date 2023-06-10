@@ -62,16 +62,24 @@ function Sidebar() {
 
   function filterWeblinkDataByDateRange(data, sd, ed) {
     console.log(sd, ed);
-    var filteredData = data[0]?.weblinkdata?.filter(function (item) {
-      var itemsd = convertToDateComing(item.start_date);
-      var itemed = convertToDateComing(item.end_date);
-      var rangesd = convertToDateGoing(sd);
-      var rangeed = convertToDateGoing(ed);
-      return itemsd >= rangesd && itemed <= rangeed;
-    });
-    console.log(filteredData);
-    setWeblinksView(filteredData);
-  }
+    console.log(data)
+    if(data?.length<2){
+      
+      var filteredData = data[0]?.weblinkdata?.filter(function (item) {
+        var itemsd = convertToDateComing(item.start_date);
+        var itemed = convertToDateComing(item.end_date);
+        var rangesd = convertToDateGoing(sd);
+        var rangeed = convertToDateGoing(ed);
+        return itemsd >= rangesd && itemed <= rangeed;
+      });
+
+      console.log(filteredData);
+      setWeblinksView(filteredData);
+    }
+    else{
+      setWeblinksView(data)
+    }
+    }
 
   useEffect(() => {
     console.log(weblinksview);
@@ -82,6 +90,7 @@ function Sidebar() {
         `${process.env.REACT_APP_BASE_URL}/weblinks?CountryName=India`
       );
       const data = await result.json();
+      console.log(data)
       setWeblinksView(data);
     };
     fetchWeblinks();
