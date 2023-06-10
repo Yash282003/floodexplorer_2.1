@@ -1,12 +1,16 @@
-.modal_content{
-    display: inline-block;
+.modal_content {
+  display: inline-block;
 }
-.specificFlooddata_modal{
-    
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.specificFlooddata_modal {
+  position: absolute;
+  /* display: flex;
+  align-items: center;
+  justify-content: center; */
+  left: 40%;
 }
-.accordion{
-    height: 20vh;
+.accordion {
+  height: 20vh;
+}
+.modal_drag_handle {
+  cursor: move;
 }

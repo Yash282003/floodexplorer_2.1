@@ -7,24 +7,28 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import SpecificFlooddata from "../SpecificFlooddata/SpecificFlooddata";
 import Weblink from "../Weblink/Weblink";
+import { useLocation } from "react-router-dom";
+
+
 function Sidebar() {
   const { sidebarOpen, setSidebarOpen } = useContext(dataContext);
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
+  const {startDate, setStartDate} = useContext(dataContext);
+    const {endDate, setEndDate} = useContext(dataContext);
   const [openPanel, setopenPanel] = useState(false);
-  const [select, setSelect] = useState("Countries");
+  const {select, setSelect} = useContext(dataContext);
   const { countryData, setCountryData } = useContext(dataContext);
   const [queryParams, setQueryParams] = useState([]);
   const { modelArrays, setModelArrays } = useContext(dataContext);
-  const {weblinksview,setWeblinksView } = useContext(dataContext);
+  const { weblinksview, setWeblinksView } = useContext(dataContext);
 
-  const [viewingSection,setViewingSection] = useState("query");
+  const [viewingSection, setViewingSection] = useState("query");
   const [show, setShow] = useState(false);
   const { floodData, setFloodData } = useContext(dataContext);
 
   const { selectedFlood, setSelectedFlood } = useContext(dataContext);
   const { pop, setPop } = useContext(dataContext);
   
+
   const Option = [
     "India",
     "Bangladesh",
@@ -47,41 +51,43 @@ function Sidebar() {
     var year = parseInt(parts[2], 10);
     return new Date(year, month, day);
   }
-  function convertToDateGoing(dateString){
+  function convertToDateGoing(dateString) {
     var parts2 = dateString.split("-");
     var day2 = parseInt(parts2[2], 10);
-  var month2 = parseInt(parts2[1], 10) - 1;
-  var year2 = parseInt(parts2[0], 10);
-  var dateObj2 = new Date(year2, month2, day2);
-  return dateObj2;
-  }
-  
-function filterWeblinkDataByDateRange(data, sd, ed) {
-  console.log(sd,ed)
-    var filteredData = data[0].weblinkdata.filter(function(item) {
-        var itemsd = convertToDateComing(item.start_date);
-        var itemed = convertToDateComing(item.end_date);
-        var rangesd =convertToDateGoing(sd)
-        var rangeed = convertToDateGoing(ed)
-      return itemsd >= rangesd && itemed <= rangeed;
-    });
-    console.log(filteredData)
-    setWeblinksView(filteredData)
+    var month2 = parseInt(parts2[1], 10) - 1;
+    var year2 = parseInt(parts2[0], 10);
+    var dateObj2 = new Date(year2, month2, day2);
+    return dateObj2;
   }
 
-  useEffect(()=>{
-   console.log(weblinksview)
-  },[weblinksview])
+  function filterWeblinkDataByDateRange(data, sd, ed) {
+    console.log(sd, ed);
+    var filteredData = data[0]?.weblinkdata?.filter(function (item) {
+      var itemsd = convertToDateComing(item.start_date);
+      var itemed = convertToDateComing(item.end_date);
+      var rangesd = convertToDateGoing(sd);
+      var rangeed = convertToDateGoing(ed);
+      return itemsd >= rangesd && itemed <= rangeed;
+    });
+    console.log(filteredData);
+    setWeblinksView(filteredData);
+  }
+
   useEffect(() => {
-    const fetchWeblinks= async()=>{
-      const result= await fetch ('http://localhost:7000/weblinks?CountryName=India')
-      const data=await result.json()
-      setWeblinksView(data)
-    }
-    fetchWeblinks()
+    console.log(weblinksview);
+  }, [weblinksview]);
+  useEffect(() => {
+    const fetchWeblinks = async () => {
+      const result = await fetch(
+        `${process.env.REACT_APP_BASE_URL}/weblinks?CountryName=India`
+      );
+      const data = await result.json();
+      setWeblinksView(data);
+    };
+    fetchWeblinks();
   }, []);
   const fetchData = async () => {
-    const url = `http://localhost:7000/api/floods/testing8?sDate=2016-04-04&eDate=2017-04-04&CountryName=India&SatelliteName=${
+    const url = `${process.env.REACT_APP_BASE_URL}/api/floods/testing8?sDate=${startDate}&eDate=${endDate}&CountryName=${select}&SatelliteName=${
       queryParams[0] ? queryParams[0] : ""
     }&SatelliteName1=${queryParams[1] ? queryParams[1] : ""}&SatelliteName2=${
       queryParams[2] ? queryParams[2] : ""
@@ -93,17 +99,16 @@ function filterWeblinkDataByDateRange(data, sd, ed) {
 
     const rep = await data.json();
     console.log(rep);
+    console.log(url)
     setFloodData(rep);
     setViewingSection("data");
-    filterWeblinkDataByDateRange(weblinksview,"2016-04-04","2018-04-04")
+    filterWeblinkDataByDateRange(weblinksview, startDate, endDate);
   };
   const handleClick = () => {
     fetchData();
     setQueryParams(selectedValues);
   };
-  const parseWeblinks=()=>{
-    
-  }
+  const parseWeblinks = () => {};
   const handleShow = () => {
     setSidebarOpen(true);
   };
@@ -167,12 +172,16 @@ function filterWeblinkDataByDateRange(data, sd, ed) {
 
     // Do something else with the value if needed
   }
-
+  const location = useLocation();
   useEffect(() => {
     console.log(selectJson);
   }, [selectJson]);
+  if (location.pathname === "/twitter") {
+    return null; 
+  }
   return (
     <>
+    
       {pop ? <SpecificFlooddata flooddata={selectedFlood?.flooddata} /> : <></>}
       <Offcanvas
         show={sidebarOpen}
@@ -183,15 +192,16 @@ function filterWeblinkDataByDateRange(data, sd, ed) {
       >
         <Offcanvas.Header closeButton></Offcanvas.Header>
         <Offcanvas.Body>
-        <li className="navbar-toggle">
-                  <button onClick={()=>setViewingSection("query")}>Query</button>
+          <li className="navbar-toggle">
+            <button onClick={() => setViewingSection("query")}>Query</button>
 
-                  <button onClick={()=>setViewingSection("data")}>Data</button>
+            <button onClick={() => setViewingSection("data")}>Data</button>
 
-                  <button onClick={()=>setViewingSection("links")}>Links</button>
-                </li>
+            <button onClick={() => setViewingSection("links")}>Links</button>
+          </li>
 
-              {viewingSection==="data" && <>
+          {viewingSection === "data" && (
+            <>
               <ul className="nav-menu-items">
                 {floodData.length > 1 ? (
                   floodData.map((element, index) => (
@@ -209,13 +219,11 @@ function filterWeblinkDataByDateRange(data, sd, ed) {
                   <div style={{ color: "black" }}>No data available</div>
                 )}
               </ul>
-              </>
-               }
-          {viewingSection ==="query" && 
+            </>
+          )}
+          {viewingSection === "query" && (
             <>
               <ul className="nav-menu-items">
-               
-
                 <div className="search_data">
                   <span>Search Flood Data</span>
                 </div>
@@ -259,7 +267,7 @@ function filterWeblinkDataByDateRange(data, sd, ed) {
 
                 <div className="dropdown">
                   <div
-                    className="dropdown-btn"
+                    className="dropdown-btn1"
                     onClick={(e) => setopenPanel(!openPanel)}
                   >
                     {select}
@@ -268,7 +276,7 @@ function filterWeblinkDataByDateRange(data, sd, ed) {
                     </span>
                   </div>
                   {openPanel && (
-                    <div className="dropdown-content">
+                    <div className="dropdown-content1">
                       {Option.map((Option) => {
                         return (
                           <div
@@ -353,18 +361,19 @@ function filterWeblinkDataByDateRange(data, sd, ed) {
                   </button>
                 </div>
               </ul>
-            </>}
+            </>
+          )}
 
-              {viewingSection ==="links" && <>
-              {
-                weblinksview?.map((e)=>{
-                  return <>
-                  <a href={e.weblink} target="_blank" rel="noopener noreferrer">{e.weblink}</a>
-                  
-                  </>
-                })
-              }
-              </>}
+          {viewingSection === "links" && (
+  <div className="links-container">
+    {weblinksview?.map((e) => (
+      <a href={e.weblink} target="_blank" rel="noopener noreferrer">
+        {e.weblink}
+      </a>
+    ))}
+  </div>
+)}
+
         </Offcanvas.Body>
       </Offcanvas>
     </>

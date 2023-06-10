@@ -1,21 +1,57 @@
-import {useContext} from "react";
+import { useContext } from "react";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import dataContext from "../../context/datacontext";
-import NavDropdown from "react-bootstrap/NavDropdown";
-// import { AiFillQuestionCircle } from "react-icons/ai";
-// import { BsGlobeEuropeAfrica } from "react-icons/bs";
-// import { IoMdCloudDownload } from "react-icons/io";
+import { Link, useLocation } from "react-router-dom";
+import exportFromJSON from "export-from-json";
 import "./Navbar.css";
-
-import { IoLogoTwitter } from "react-icons/io";
 
 function NavbarMenu() {
   const { sidebarOpen, setSidebarOpen } = useContext(dataContext);
+  const { startDate, setStartDate } = useContext(dataContext);
+  const { endDate, setEndDate } = useContext(dataContext);
+  const { select, setSelect } = useContext(dataContext);
+  const location = useLocation();
+  const isTwitterPage = location.pathname === "/twitter";
+
   const handleShow = () => {
     setSidebarOpen(true);
   };
+
+  const onExportRemoteData = () => {
+    const downloadDataUrl = isTwitterPage
+      ? `${process.env.REACT_APP_BASE_URL}/tweets?sDate=${convertToDateGoing(
+          startDate
+        )}&eDate=${convertToDateGoing(endDate)}`
+      : `${process.env.REACT_APP_BASE_URL}/api/floods/testing8?sDate=${startDate}&eDate=${endDate}&CountryName=${select}`;
+
+    fetch(downloadDataUrl)
+      .then((resp) => resp.json())
+      .then((response) => {
+        const fileName = "download";
+        const exportType = exportFromJSON.types.csv;
+
+        exportFromJSON({ data: response, fileName, exportType });
+      });
+      
+  };
+
+  function convertToDateGoing(dateString) {
+    if (!dateString) {
+      return ""; // Return an empty string or handle the null/undefined case accordingly
+    }
+  
+    var parts2 = dateString.split("-");
+    var day2 = parts2[2];
+    var month2 = parts2[1];
+    var year2 = parts2[0];
+    var dateObj2 = day2 + "-" + month2 + "-" + year2;
+    console.log(dateObj2);
+    return dateObj2;
+  }
+  
+
   return (
     <Navbar
       bg="light-"
@@ -27,27 +63,20 @@ function NavbarMenu() {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link href="#home"> About </Nav.Link>
+            <Nav.Link href="#home" as={Link} to="/">
+              {" "}
+              About{" "}
+            </Nav.Link>
             <Nav.Link href="#link"> Tools </Nav.Link>
-            <Nav.Link href="#link">Download </Nav.Link>
-            <Nav.Link href="#link">Twitter</Nav.Link>
-            <Nav.Link href="#link" onClick={handleShow}>QueryData</Nav.Link>
-            {/* <NavDropdown
-              title="Query"
-              id="basic-nav-dropdown"
-              className="query-dropdown"
-            >
-              <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-
-              <NavDropdown.Item href="#action/3.2">
-                Another action
-              </NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item href="#action/3.4">
-                Separated link
-              </NavDropdown.Item>
-            </NavDropdown> */}
+            <Nav.Link href="#link" onClick={onExportRemoteData}>
+              Download
+            </Nav.Link>
+            <Nav.Link href="#link" as={Link} to="/twitter">
+              Twitter
+            </Nav.Link>
+            <Nav.Link href="#link" onClick={handleShow}>
+              QueryData
+            </Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>

@@ -52,8 +52,8 @@ select {
   width: 100%;
   margin-top: 15px;
 }
-.dropdown-btn {
-  width: 100%;
+.dropdown-btn1 {
+  width: 107%;
   height: 33px;
   background-color: aliceblue;
   color: black;
@@ -62,8 +62,8 @@ select {
   padding: 4px 7px;
   border-radius: 6px;
 }
-.dropdown-content {
-  width: 100%;
+.dropdown-content1 {
+  width: 107%;
   height: auto;
   background-color: aliceblue;
   color: black;
@@ -98,4 +98,12 @@ select {
 }
 #submitbutton button:hover {
   background-color: rgb(226, 225, 224);
+}
+.links-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.links-container a {
+  margin-bottom: 10px;
 }
