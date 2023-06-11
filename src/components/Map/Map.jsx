@@ -51,8 +51,13 @@ const Map = () => {
     ];
     
        modelArrays?.forEach((e)=>{
+
          var reversedCoordinates = JSON.parse(e)[0].map(function(coord) {
-           return [coord[1], coord[0]];
+
+          console.log(coord)
+          if(coord[0]>coord[1]){  return [coord[1], coord[0]]; }
+          else{return [coord[0], coord[1]];}
+         
          });
       var polygon = L.polygon(reversedCoordinates, { color: 'red' }).addTo(map);
       console.log(JSON.parse(e)[0])

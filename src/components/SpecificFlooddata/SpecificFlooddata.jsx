@@ -39,7 +39,7 @@ function SpecificFlooddata({ flooddata }) {
             <Accordion
               defaultActiveKey="0"
               flush
-              style={{ width: "30vw", height: "400px", overflowY: "auto" }}
+              style={{ width: "45vw", height: "400px", overflowY: "auto" }}
             >
               <VscChromeClose
                 style={{ float: "right", fontSize: "25px" }}
@@ -48,7 +48,7 @@ function SpecificFlooddata({ flooddata }) {
               {flooddata.map((e) => {
                 return (
                   <Accordion.Item eventKey={e.field1}>
-                    <Accordion.Header>{e.provider}</Accordion.Header>
+                    <Accordion.Header>{e.title}</Accordion.Header>
                     <Accordion.Body>
                       <Table striped bordered hover>
                         <thead>

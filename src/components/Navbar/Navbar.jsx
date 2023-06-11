@@ -36,9 +36,10 @@ function NavbarMenu() {
         const exportType = exportFromJSON.types.csv;
 
         exportFromJSON({ data: floodData, fileName, exportType });
-      // });
+      ;
       
   };
+  
 
   function convertToDateGoing(dateString) {
     if (!dateString) {
@@ -68,7 +69,7 @@ function NavbarMenu() {
           <Nav className="me-auto">
             <Nav.Link href="#home" as={Link} to="/">
               {" "}
-              About{" "}
+              Home{" "}
             </Nav.Link>
             <Nav.Link href="#link"> Tools </Nav.Link>
             <Nav.Link href="#link" onClick={onExportRemoteData}>
