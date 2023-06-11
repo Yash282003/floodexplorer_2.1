@@ -48,7 +48,7 @@ function SpecificFlooddata({ flooddata }) {
               {flooddata.map((e) => {
                 return (
                   <Accordion.Item eventKey={e.field1}>
-                    <Accordion.Header>{e.item_type}</Accordion.Header>
+                    <Accordion.Header>{e.provider}</Accordion.Header>
                     <Accordion.Body>
                       <Table striped bordered hover>
                         <thead>

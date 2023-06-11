@@ -11,6 +11,8 @@ function NavbarMenu() {
   const { sidebarOpen, setSidebarOpen } = useContext(dataContext);
   const { startDate, setStartDate } = useContext(dataContext);
   const { endDate, setEndDate } = useContext(dataContext);
+  const { floodData, setFloodData } = useContext(dataContext);
+
   const { select, setSelect } = useContext(dataContext);
   const location = useLocation();
   const isTwitterPage = location.pathname === "/twitter";
@@ -20,20 +22,21 @@ function NavbarMenu() {
   };
 
   const onExportRemoteData = () => {
-    const downloadDataUrl = isTwitterPage
-      ? `${process.env.REACT_APP_BASE_URL}/tweets?sDate=${convertToDateGoing(
-          startDate
-        )}&eDate=${convertToDateGoing(endDate)}`
-      : `${process.env.REACT_APP_BASE_URL}/api/floods/testing8?sDate=${startDate}&eDate=${endDate}&CountryName=${select}`;
+    // const downloadDataUrl = isTwitterPage
+    //   ? `${process.env.REACT_APP_BASE_URL}/tweets?sDate=${convertToDateGoing(
+    //       startDate
+    //     )}&eDate=${convertToDateGoing(endDate)}`
+    //   : `${process.env.REACT_APP_BASE_URL}/api/floods/testing8?sDate=${startDate}&eDate=${endDate}&CountryName=${select}`;
 
-    fetch(downloadDataUrl)
-      .then((resp) => resp.json())
-      .then((response) => {
+    // fetch(downloadDataUrl)
+    //   .then((resp) => resp.json())
+    //   .then((response) => {
         const fileName = "download";
+        console.log(floodData);
         const exportType = exportFromJSON.types.csv;
 
-        exportFromJSON({ data: response, fileName, exportType });
-      });
+        exportFromJSON({ data: floodData, fileName, exportType });
+      // });
       
   };
 

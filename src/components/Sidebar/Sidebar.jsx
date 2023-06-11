@@ -24,7 +24,7 @@ function Sidebar() {
   const [viewingSection, setViewingSection] = useState("query");
   const [show, setShow] = useState(false);
   const { floodData, setFloodData } = useContext(dataContext);
-
+  const [url, setUrl] = useState('')
   const { selectedFlood, setSelectedFlood } = useContext(dataContext);
   const { pop, setPop } = useContext(dataContext);
   
@@ -95,14 +95,19 @@ function Sidebar() {
     };
     fetchWeblinks();
   }, []);
-  const fetchData = async () => {
-    const url = `${process.env.REACT_APP_BASE_URL}/api/floods/testing8?sDate=${startDate}&eDate=${endDate}&CountryName=${select}&SatelliteName=${
+
+  useEffect(()=>{
+    setUrl(`${process.env.REACT_APP_BASE_URL}/api/floods/testing8?sDate=${startDate}&eDate=${endDate}&CountryName=${select}&SatelliteName=${
       queryParams[0] ? queryParams[0] : ""
     }&SatelliteName1=${queryParams[1] ? queryParams[1] : ""}&SatelliteName2=${
       queryParams[2] ? queryParams[2] : ""
     }&SatelliteName3=${queryParams[3] ? queryParams[3] : ""}&SatelliteName4=${
       queryParams[4] ? queryParams[4] : ""
-    }`;
+    }`)
+    console.log(url)
+  },[startDate,endDate,queryParams,select])
+const fetchData = async () => {
+
 
     const data = await fetch(url);
 
@@ -112,10 +117,13 @@ function Sidebar() {
     setFloodData(rep);
     setViewingSection("data");
     filterWeblinkDataByDateRange(weblinksview, startDate, endDate);
+    setQueryParams([])
+    setSelect(null)
+    setStartDate(null)
+    setEndDate(null)
   };
   const handleClick = () => {
     fetchData();
-    setQueryParams(selectedValues);
   };
   const parseWeblinks = () => {};
   const handleShow = () => {
@@ -144,9 +152,6 @@ function Sidebar() {
     console.log("hfjhfj");
     setPop(true);
   };
-  useEffect(() => {
-    console.log(selectedFlood);
-  }, [selectedFlood]);
   var selectedValues = [];
   function handleParams(event) {
     var clickedElement = event.target;
@@ -162,6 +167,8 @@ function Sidebar() {
         selectedValues.splice(index, 1);
       }
     }
+    setQueryParams(selectedValues);
+
   }
   var selectJson = [];
   function handleGeoJSON(event) {
