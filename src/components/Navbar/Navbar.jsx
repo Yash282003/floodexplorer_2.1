@@ -71,7 +71,7 @@ function NavbarMenu() {
               {" "}
               Home{" "}
             </Nav.Link>
-            <Nav.Link href="#link"> Tools </Nav.Link>
+           
             <Nav.Link href="#link" onClick={onExportRemoteData}>
               Download
             </Nav.Link>
