@@ -5,6 +5,8 @@ import TweetChart from "../../components/TweetChart/TweetChart";
 import "./Twitter.css";
 import { BsTwitter } from "react-icons/bs";
 import { IoCaretDownSharp } from "react-icons/io5";
+import Spinner from "react-bootstrap/Spinner";
+import { saveAs } from "file-saver";
 
 const Twitter = () => {
   const [twitsdata, setTwitsData] = useState([]);
@@ -15,6 +17,8 @@ const Twitter = () => {
   const [select, setSelect] = useState("Countries");
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isDisabled,setIsDisabled]= useState(true);
   const handleStartDateChange = (date) => {
     setStartDate(date.target.value);
     convertToDateGoing(date.target.value);
@@ -22,6 +26,30 @@ const Twitter = () => {
 
   const handleEndDateChange = (date) => {
     setEndDate(date.target.value);
+  };
+  const handleDownload = () => {
+    if (showData.length === 0) {
+      console.log("No data available to download");
+      return;
+    }
+    // Convert showData to CSV format
+    const csvData = convertToCSV(showData);
+
+     // Create a Blob from the CSV data
+     const blob = new Blob([csvData], { type: "text/csv;charset=utf-8" });
+
+     // Use file-saver library to trigger the download
+     saveAs(blob, "twitter_data.csv");
+   };
+
+   // Function to convert the showData array to CSV format
+  const convertToCSV = (data) => {
+    if (!data) return "";
+    const headers = Object.keys(data[0]).join(",") + "\n";
+    const rows = data
+      .map((item) => Object.values(item).join(","))
+      .join("\n");
+    return headers + rows;
   };
   const Option = [
     "India",
@@ -39,18 +67,23 @@ const Twitter = () => {
     "Laos",
   ];
   async function fetchTwits() {
+    setIsLoading(true);
     const twits = await fetch(
       `${process.env.REACT_APP_BASE_URL}/tweets?sDate=${convertToDateGoing(
         startDate
       )}&eDate=${convertToDateGoing(endDate)}`
     );
     const rep = await twits.json();
-    setShowData(rep);
-    console.log(rep);
-
-    setTwitsData(countTweetsByDate(rep));
-
-   
+    if (rep && rep.length > 0) {
+      setShowData(rep);
+      setTwitsData(countTweetsByDate(rep));
+    } else {
+      setShowData([]);
+      setTwitsData({});
+      console.log(rep);
+    }
+    setIsLoading(false);
+    setIsDisabled(false);
   }
   function convertToDateGoing(dateString) {
     var parts2 = dateString.split("-");
@@ -161,6 +194,11 @@ const Twitter = () => {
                 )}
               </div>
             </div>
+            <div className="download-button-container">
+        <button onClick={handleDownload} className="button" disabled={isDisabled}>
+          Download Data
+        </button>
+      </div>
 
             <div class="form-group">
               <button type="submit" onClick={() => fetchTwits()} class="button">
@@ -178,54 +216,69 @@ const Twitter = () => {
           alignItems: "center",
           justifyContent: "center",
           margin: "auto",
-          height:"40vh"
+          height: "40vh",
         }}
       >
         <TweetChart tweetCounts={twitsdata} />
       </div>
-
-      <div id="tweet-table"  style={{
-          width: "80vw",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          margin: "auto",
-        }}>
-        <main id="site-main">
-          <div class="container">
-            <table class="table twittable">
-              <thead class="thead-dark">
-                <tr>
-                  <th>S.N.</th>
-                  <th>StartDate</th>
-                  <th>Country</th>
-                  <th>Tweet</th>
-                </tr>
-              </thead>
-              <tbody id="twitsbody">
-                {showData?.map((e, index) => {
-                  return (
-                    <tr>
-                      <td>{index + 1}</td>
-                      <td>{e.Datetime}</td>
-                      <td>India</td>
-                      <td>
-                        <a
-                          href={`https://twitter.com/anyuser/status/${e["Tweet Id"]}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          {`https://twitter.com/anyuser/status/${e["Tweet Id"]}`}
-                        </a>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        </main>
-      </div>
+      {isLoading ? (
+        <div
+          className="spinner-container"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Spinner animation="border" />
+        </div>
+      ) : (
+        <div
+          id="tweet-table"
+          style={{
+            width: "80vw",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            margin: "auto",
+          }}
+        >
+          <main id="site-main">
+            <div class="container">
+              <table class="table twittable">
+                <thead class="thead-dark">
+                  <tr>
+                    <th>S.N.</th>
+                    <th>StartDate</th>
+                    <th>Country</th>
+                    <th>Tweet</th>
+                  </tr>
+                </thead>
+                <tbody id="twitsbody">
+                  {showData?.map((e, index) => {
+                    return (
+                      <tr>
+                        <td>{index + 1}</td>
+                        <td>{e.Datetime}</td>
+                        <td>India</td>
+                        <td>
+                          <a
+                            href={`https://twitter.com/anyuser/status/${e["Tweet Id"]}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            {`https://twitter.com/anyuser/status/${e["Tweet Id"]}`}
+                          </a>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </main>
+        </div>
+      )}
     </>
   );
 };

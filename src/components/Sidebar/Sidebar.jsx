@@ -8,14 +8,14 @@ import Modal from "react-bootstrap/Modal";
 import SpecificFlooddata from "../SpecificFlooddata/SpecificFlooddata";
 import Weblink from "../Weblink/Weblink";
 import { useLocation } from "react-router-dom";
-
+import Spinner from "react-bootstrap/Spinner";
 
 function Sidebar() {
   const { sidebarOpen, setSidebarOpen } = useContext(dataContext);
-  const {startDate, setStartDate} = useContext(dataContext);
-    const {endDate, setEndDate} = useContext(dataContext);
+  const { startDate, setStartDate } = useContext(dataContext);
+  const { endDate, setEndDate } = useContext(dataContext);
   const [openPanel, setopenPanel] = useState(false);
-  const {select, setSelect} = useContext(dataContext);
+  const { select, setSelect } = useContext(dataContext);
   const { countryData, setCountryData } = useContext(dataContext);
   const [queryParams, setQueryParams] = useState([]);
   const { modelArrays, setModelArrays } = useContext(dataContext);
@@ -28,7 +28,7 @@ function Sidebar() {
   const [url, setUrl] = useState('')
   const { selectedFlood, setSelectedFlood } = useContext(dataContext);
   const { pop, setPop } = useContext(dataContext);
-  
+  const [isLoading, setIsLoading] = useState(false);
 
   const Option = [
     "India",
@@ -109,12 +109,12 @@ function Sidebar() {
   },[startDate,endDate,queryParams,select])
 const fetchData = async () => {
 
-
+setIsLoading(true);
     const data = await fetch(url);
 
     const rep = await data.json();
     console.log(rep);
-    console.log(url)
+    console.log(url);
     setFloodData(rep);
     if(rep){
       setCenter([rep[0].flooddata[0].Latitude,rep[0].flooddata[0].Longitude])
@@ -122,10 +122,7 @@ const fetchData = async () => {
     }
     setViewingSection("data");
     filterWeblinkDataByDateRange(weblinksview, startDate, endDate);
-    setQueryParams([])
-    setSelect(null)
-    setStartDate(null)
-    setEndDate(null)
+    setIsLoading(false);
   };
   useEffect(()=>{
 console.log(center)
@@ -201,11 +198,10 @@ console.log(center)
     console.log(selectJson);
   }, [selectJson]);
   if (location.pathname === "/twitter") {
-    return null; 
+    return null;
   }
   return (
     <>
-    
       {pop ? <SpecificFlooddata flooddata={selectedFlood?.flooddata} /> : <></>}
       <Offcanvas
         show={sidebarOpen}
@@ -226,23 +222,29 @@ console.log(center)
 
           {viewingSection === "data" && (
             <>
-              <ul className="nav-menu-items">
-                {floodData.length > 1 ? (
-                  floodData.map((element, index) => (
-                    <li key={index}>
-                      <div>{element.CountryName}</div>
-                      <div
-                        onClick={() => handleShow1(element)}
-                        style={{ cursor: "pointer" }}
-                      >
-                        {element.floodname}
-                      </div>
-                    </li>
-                  ))
-                ) : (
-                  <div style={{ color: "black" }}>No data available</div>
-                )}
-              </ul>
+              {isLoading ? (
+                <div className="spinner-container" style={{display:'flex',alignItems:'center',justifyContent:'center'}}>
+                  <Spinner animation="border" />
+                </div>
+              ) : (
+                <ul className="nav-menu-items">
+                  {floodData.length > 1 ? (
+                    floodData.map((element, index) => (
+                      <li key={index}>
+                        <div>{element.CountryName}</div>
+                        <div
+                          onClick={() => handleShow1(element)}
+                          style={{ cursor: "pointer" }}
+                        >
+                          {element.floodname}
+                        </div>
+                      </li>
+                    ))
+                  ) : (
+                    <div style={{ color: "black" }}>No data available</div>
+                  )}
+                </ul>
+              )}
             </>
           )}
           {viewingSection === "query" && (
@@ -389,15 +391,14 @@ console.log(center)
           )}
 
           {viewingSection === "links" && (
-  <div className="links-container">
-    {weblinksview?.map((e) => (
-      <a href={e.weblink} target="_blank" rel="noopener noreferrer">
-        {e.weblink}
-      </a>
-    ))}
-  </div>
-)}
-
+            <div className="links-container">
+              {weblinksview?.map((e) => (
+                <a href={e.weblink} target="_blank" rel="noopener noreferrer">
+                  {e.weblink}
+                </a>
+              ))}
+            </div>
+          )}
         </Offcanvas.Body>
       </Offcanvas>
     </>
