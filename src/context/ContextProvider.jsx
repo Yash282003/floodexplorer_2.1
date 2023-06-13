@@ -5,7 +5,7 @@ const ContextProvider = (props) => {
     // const [countryData,setCountryData]= useState(null)
     const [floodData,setFloodData]=useState([])
     const [weblinksview,setWeblinksView]=useState([])
-    // const [queryParams,setQueryParams]=useState([])
+    const [center,setCenter]=useState([22.9074872, 79.07306671])
     const [modelArrays,setModelArrays]= useState([]);
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [selectedFlood, setSelectedFlood] = useState([]);
@@ -16,7 +16,7 @@ const ContextProvider = (props) => {
     const[pop, setPop]=useState(false)
       return (
         <div>
-          <dataContext.Provider value={{weblinksview,setWeblinksView, modelArrays,setModelArrays,floodData,setFloodData,sidebarOpen, setSidebarOpen,selectedFlood, setSelectedFlood,pop, setPop ,startDate, setStartDate,endDate, setEndDate,select, setSelect}} >
+          <dataContext.Provider value={{weblinksview,center,setCenter,setWeblinksView, modelArrays,setModelArrays,floodData,setFloodData,sidebarOpen, setSidebarOpen,selectedFlood, setSelectedFlood,pop, setPop ,startDate, setStartDate,endDate, setEndDate,select, setSelect}} >
             {props.children}
           </dataContext.Provider>
         </div>

@@ -70,14 +70,14 @@ function NavbarMenu() {
               {" "}
               About{" "}
             </Nav.Link>
-            <Nav.Link href="#link"> Tools </Nav.Link>
-            <Nav.Link href="#link" onClick={onExportRemoteData}>
+            <Nav.Link href=""> Tools </Nav.Link>
+            <Nav.Link href="" onClick={onExportRemoteData}>
               Download
             </Nav.Link>
-            <Nav.Link href="#link" as={Link} to="/twitter">
+            <Nav.Link href="" as={Link} to="/twitter">
               Twitter
             </Nav.Link>
-            <Nav.Link href="#link" onClick={handleShow}>
+            <Nav.Link href="" onClick={handleShow}>
               QueryData
             </Nav.Link>
           </Nav>

@@ -20,6 +20,7 @@ function Sidebar() {
   const [queryParams, setQueryParams] = useState([]);
   const { modelArrays, setModelArrays } = useContext(dataContext);
   const { weblinksview, setWeblinksView } = useContext(dataContext);
+  const { center,setCenter} = useContext(dataContext);
 
   const [viewingSection, setViewingSection] = useState("query");
   const [show, setShow] = useState(false);
@@ -115,6 +116,10 @@ const fetchData = async () => {
     console.log(rep);
     console.log(url)
     setFloodData(rep);
+    if(rep){
+      setCenter([rep[0].flooddata[0].Latitude,rep[0].flooddata[0].Longitude])
+
+    }
     setViewingSection("data");
     filterWeblinkDataByDateRange(weblinksview, startDate, endDate);
     setQueryParams([])
@@ -122,6 +127,9 @@ const fetchData = async () => {
     setStartDate(null)
     setEndDate(null)
   };
+  useEffect(()=>{
+console.log(center)
+  },[center])
   const handleClick = () => {
     fetchData();
   };

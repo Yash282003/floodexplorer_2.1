@@ -11,12 +11,9 @@ function SpecificFlooddata({ flooddata }) {
   const handlePop = () => {
     setPop(false);
   };
-  useEffect(() => {
-    console.log(modelArrays);
-  }, [modelArrays]);
   const { pop, setPop } = useContext(dataContext);
 
-  console.log(flooddata);
+
   const { footprint, gsd, epsg_code, item_type } = flooddata;
 
   const handleFootprintPlotting = (event) => {

@@ -9,7 +9,8 @@ const Map = () => {
     const { sidebarOpen } = useContext(dataContext);
     const { floodData, setFloodData } = useContext(dataContext);
     const { modelArrays,setModelArrays } = useContext(dataContext);
-
+    const { center,setCenter } = useContext(dataContext);
+    console.log("abhi ka center", center)
 //   const { isSideBarOpen, setIsSideBarOpen } = useContext(dataContext)
 
   const style2 = {
@@ -34,7 +35,8 @@ const Map = () => {
       //maxBounds: bounds,   // Then add it here..
 
 
-    }).setView([22.9074872, 79.07306671], 5);
+    }).setView(center ? center :[22.9074872, 79.07306671], 5);
+    map.dragging.enable();
     var googleHybrid = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 10,
       subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
@@ -97,7 +99,7 @@ const Map = () => {
 
 
 
-  }, [modelArrays,floodData])
+  }, [modelArrays,floodData,center])
   return (
     <div
       style={{ display: 'block', zIndex:-1000,overflow: 'hidden', width: sidebarOpen ? "74.2vw" : "100vw", position: 'absolute', right: '0' }}
