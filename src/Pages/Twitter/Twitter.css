@@ -2,26 +2,25 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
-    background-color: rgb(254, 254, 252);
-    overflow-x: 0;
-    
+  background-color: rgb(254, 254, 252);
+  overflow-x: 0;
 }
-.heading{
-    color: rgb(71, 71, 70);
-    pointer-events: none;
-    font-weight: 1000;
+.heading {
+  color: rgb(71, 71, 70);
+  pointer-events: none;
+  font-weight: 1000;
 }
 
-.navbar-brand{
-    float: right;
+.navbar-brand {
+  float: right;
 }
 .new_flood {
   display: flex;
   justify-content: center;
   align-items: center;
 }
-.icon:hover{
-    color: rgb(106, 104, 102);
+.icon:hover {
+  color: rgb(106, 104, 102);
 }
 .form-container {
   display: flex;
@@ -43,8 +42,8 @@ body {
   width: 300px;
   margin-top: 13px;
 }
-.button:hover{
-    background-color: rgb(196, 195, 195);
+.button:hover {
+  background-color: rgb(196, 195, 195);
 }
 .form-group input {
   width: 300px;
@@ -53,7 +52,7 @@ body {
   width: 300px;
   margin-top: 15px;
 }
- .dropdown-btn {
+.dropdown-btn {
   width: 100%;
   height: 33px;
   background-color: aliceblue;
@@ -76,27 +75,26 @@ body {
   background-color: rgb(195, 196, 197);
 }
 .twittable {
-    width: 100%;
-    table-layout: fixed;
-  }
-  
-  .twittable th,
-  .twittable td {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  
-  .twittable td:nth-child(n+6) {
+  width: 100%;
+  table-layout: fixed;
+}
+
+.twittable th,
+.twittable td {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.twittable td:nth-child(n + 6) {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .twittable td:nth-child(n + 2) {
     display: none;
   }
-  
-  @media (max-width: 768px) {
-    .twittable td:nth-child(n+2) {
-      display: none;
-    }
-    .twittable td:nth-child(n+6) {
-      display: table-cell;
-    }
+  .twittable td:nth-child(n + 6) {
+    display: table-cell;
   }
-  
+}

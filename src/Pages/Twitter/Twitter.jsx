@@ -18,7 +18,7 @@ const Twitter = () => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [isDisabled,setIsDisabled]= useState(true);
+  const [isDisabled, setIsDisabled] = useState(true);
   const handleStartDateChange = (date) => {
     setStartDate(date.target.value);
     convertToDateGoing(date.target.value);
@@ -35,20 +35,18 @@ const Twitter = () => {
     // Convert showData to CSV format
     const csvData = convertToCSV(showData);
 
-     // Create a Blob from the CSV data
-     const blob = new Blob([csvData], { type: "text/csv;charset=utf-8" });
+    // Create a Blob from the CSV data
+    const blob = new Blob([csvData], { type: "text/csv;charset=utf-8" });
 
-     // Use file-saver library to trigger the download
-     saveAs(blob, "twitter_data.csv");
-   };
+    // Use file-saver library to trigger the download
+    saveAs(blob, "twitter_data.csv");
+  };
 
-   // Function to convert the showData array to CSV format
+  // Function to convert the showData array to CSV format
   const convertToCSV = (data) => {
     if (!data) return "";
     const headers = Object.keys(data[0]).join(",") + "\n";
-    const rows = data
-      .map((item) => Object.values(item).join(","))
-      .join("\n");
+    const rows = data.map((item) => Object.values(item).join(",")).join("\n");
     return headers + rows;
   };
   const Option = [
@@ -74,6 +72,7 @@ const Twitter = () => {
       )}&eDate=${convertToDateGoing(endDate)}`
     );
     const rep = await twits.json();
+    console.log(rep);
     if (rep && rep.length > 0) {
       setShowData(rep);
       setTwitsData(countTweetsByDate(rep));
@@ -90,7 +89,7 @@ const Twitter = () => {
     var day2 = parts2[2];
     var month2 = parts2[1];
     var year2 = parts2[0];
-    var dateObj2 = day2 + "-" + month2 + "-" + year2;
+    var dateObj2 = month2 + "-" + day2 + "-" + year2;
     console.log(dateObj2);
     return dateObj2;
   }
@@ -195,10 +194,14 @@ const Twitter = () => {
               </div>
             </div>
             <div className="download-button-container">
-        <button onClick={handleDownload} className="button" disabled={isDisabled}>
-          Download Data
-        </button>
-      </div>
+              <button
+                onClick={handleDownload}
+                className="button"
+                disabled={isDisabled}
+              >
+                Download Data
+              </button>
+            </div>
 
             <div class="form-group">
               <button type="submit" onClick={() => fetchTwits()} class="button">

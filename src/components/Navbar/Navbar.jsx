@@ -22,39 +22,11 @@ function NavbarMenu() {
   };
 
   const onExportRemoteData = () => {
-    // const downloadDataUrl = isTwitterPage
-    //   ? `${process.env.REACT_APP_BASE_URL}/tweets?sDate=${convertToDateGoing(
-    //       startDate
-    //     )}&eDate=${convertToDateGoing(endDate)}`
-    //   : `${process.env.REACT_APP_BASE_URL}/api/floods/testing8?sDate=${startDate}&eDate=${endDate}&CountryName=${select}`;
-
-    // fetch(downloadDataUrl)
-    //   .then((resp) => resp.json())
-    //   .then((response) => {
-        const fileName = "download";
-        console.log(floodData);
-        const exportType = exportFromJSON.types.csv;
-
-        exportFromJSON({ data: floodData, fileName, exportType });
-      ;
-      
+    const fileName = "download";
+    console.log(floodData);
+    const exportType = exportFromJSON.types.csv;
+    exportFromJSON({ data: floodData, fileName, exportType });
   };
-  
-
-  function convertToDateGoing(dateString) {
-    if (!dateString) {
-      return ""; // Return an empty string or handle the null/undefined case accordingly
-    }
-  
-    var parts2 = dateString.split("-");
-    var day2 = parts2[2];
-    var month2 = parts2[1];
-    var year2 = parts2[0];
-    var dateObj2 = day2 + "-" + month2 + "-" + year2;
-    console.log(dateObj2);
-    return dateObj2;
-  }
-  
 
   return (
     <Navbar

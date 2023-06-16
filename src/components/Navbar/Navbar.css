@@ -1,16 +1,14 @@
-.me-auto{
-    display: flex;
-    /* justify-content: space-between; */
-    align-items: center;
+.me-auto {
+  display: flex;
+  /* justify-content: space-between; */
+  align-items: center;
 }
-#basic-nav-dropdown{
-    display: flex;
-    flex: start;
-    align-items: center;
+#basic-nav-dropdown {
+  display: flex;
+  flex: start;
+  align-items: center;
 }
 .query-dropdown {
-    display: flex;
-    align-items: center;
-  }
-  
-  
+  display: flex;
+  align-items: center;
+}

@@ -8,13 +8,10 @@ import Draggable from "react-draggable";
 
 function SpecificFlooddata({ flooddata }) {
   const { modelArrays, setModelArrays } = useContext(dataContext);
+  const { pop, setPop } = useContext(dataContext);
   const handlePop = () => {
     setPop(false);
   };
-  const { pop, setPop } = useContext(dataContext);
-
-
-  const { footprint, gsd, epsg_code, item_type } = flooddata;
 
   const handleFootprintPlotting = (event) => {
     const { value, checked } = event.target;

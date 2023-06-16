@@ -3,10 +3,8 @@ import Offcanvas from "react-bootstrap/Offcanvas";
 import "./Sidebar.css";
 import { IoCaretDownSharp } from "react-icons/io5";
 import dataContext from "../../context/datacontext";
-import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
 import SpecificFlooddata from "../SpecificFlooddata/SpecificFlooddata";
-import Weblink from "../Weblink/Weblink";
+
 import { useLocation } from "react-router-dom";
 import Spinner from "react-bootstrap/Spinner";
 
@@ -20,12 +18,12 @@ function Sidebar() {
   const [queryParams, setQueryParams] = useState([]);
   const { modelArrays, setModelArrays } = useContext(dataContext);
   const { weblinksview, setWeblinksView } = useContext(dataContext);
-  const { center,setCenter} = useContext(dataContext);
+  const { center, setCenter } = useContext(dataContext);
 
   const [viewingSection, setViewingSection] = useState("query");
   const [show, setShow] = useState(false);
   const { floodData, setFloodData } = useContext(dataContext);
-  const [url, setUrl] = useState('')
+  const [url, setUrl] = useState("");
   const { selectedFlood, setSelectedFlood } = useContext(dataContext);
   const { pop, setPop } = useContext(dataContext);
   const [isLoading, setIsLoading] = useState(false);
@@ -63,9 +61,8 @@ function Sidebar() {
 
   function filterWeblinkDataByDateRange(data, sd, ed) {
     console.log(sd, ed);
-    console.log(data)
-    if(data?.length<2){
-      
+    console.log(data);
+    if (data?.length < 2) {
       var filteredData = data[0]?.weblinkdata?.filter(function (item) {
         var itemsd = convertToDateComing(item.start_date);
         var itemed = convertToDateComing(item.end_date);
@@ -76,63 +73,58 @@ function Sidebar() {
 
       console.log(filteredData);
       setWeblinksView(filteredData);
+    } else {
+      setWeblinksView(data);
     }
-    else{
-      setWeblinksView(data)
-    }
-    }
-
-  useEffect(() => {
-    console.log(weblinksview);
-  }, [weblinksview]);
+  }
   useEffect(() => {
     const fetchWeblinks = async () => {
       const result = await fetch(
         `${process.env.REACT_APP_BASE_URL}/weblinks?CountryName=India`
       );
       const data = await result.json();
-      console.log(data)
+      console.log(data);
       setWeblinksView(data);
     };
     fetchWeblinks();
   }, []);
 
-  useEffect(()=>{
-    setUrl(`${process.env.REACT_APP_BASE_URL}/api/floods/testing8?sDate=${startDate}&eDate=${endDate}&CountryName=${select}&SatelliteName=${
-      queryParams[0] ? queryParams[0] : ""
-    }&SatelliteName1=${queryParams[1] ? queryParams[1] : ""}&SatelliteName2=${
-      queryParams[2] ? queryParams[2] : ""
-    }&SatelliteName3=${queryParams[3] ? queryParams[3] : ""}&SatelliteName4=${
-      queryParams[4] ? queryParams[4] : ""
-    }`)
-    console.log(url)
-  },[startDate,endDate,queryParams,select])
-const fetchData = async () => {
+  useEffect(() => {
+    setUrl(
+      `${
+        process.env.REACT_APP_BASE_URL
+      }/api/floods/testing8?sDate=${startDate}&eDate=${endDate}&CountryName=${select}&SatelliteName=${
+        queryParams[0] ? queryParams[0] : ""
+      }&SatelliteName1=${queryParams[1] ? queryParams[1] : ""}&SatelliteName2=${
+        queryParams[2] ? queryParams[2] : ""
+      }&SatelliteName3=${queryParams[3] ? queryParams[3] : ""}&SatelliteName4=${
+        queryParams[4] ? queryParams[4] : ""
+      }`
+    );
+    console.log(url);
+  }, [startDate, endDate, queryParams, select]);
 
-setIsLoading(true);
+  const fetchData = async () => {
+    setIsLoading(true);
     const data = await fetch(url);
 
     const rep = await data.json();
     console.log(rep);
     console.log(url);
     setFloodData(rep);
-    if(rep){
-      setCenter([rep[0].flooddata[0].Latitude,rep[0].flooddata[0].Longitude])
-
+    if (rep) {
+      setCenter([
+        rep[0]?.flooddata[0]?.Latitude,
+        rep[0]?.flooddata[0]?.Longitude,
+      ]);
     }
     setViewingSection("data");
     filterWeblinkDataByDateRange(weblinksview, startDate, endDate);
     setIsLoading(false);
   };
-  useEffect(()=>{
-console.log(center)
-  },[center])
+
   const handleClick = () => {
     fetchData();
-  };
-  const parseWeblinks = () => {};
-  const handleShow = () => {
-    setSidebarOpen(true);
   };
 
   const handleClose = () => {
@@ -146,16 +138,14 @@ console.log(center)
   const handleEndDateChange = (date) => {
     setEndDate(date.target.value);
   };
-  // const handleClose1= () => {
-  //   setShow(false);
-  //   setSelectedFlood(null);
-  // };
 
   const handleShow1 = (floodName) => {
     console.log(floodName);
     setSelectedFlood(floodName);
-    console.log("hfjhfj");
     setPop(true);
+  };
+  const handleReset = () => {
+    window.location.reload();
   };
   var selectedValues = [];
   function handleParams(event) {
@@ -173,7 +163,6 @@ console.log(center)
       }
     }
     setQueryParams(selectedValues);
-
   }
   var selectJson = [];
   function handleGeoJSON(event) {
@@ -194,9 +183,6 @@ console.log(center)
     // Do something else with the value if needed
   }
   const location = useLocation();
-  useEffect(() => {
-    console.log(selectJson);
-  }, [selectJson]);
   if (location.pathname === "/twitter") {
     return null;
   }
@@ -223,7 +209,14 @@ console.log(center)
           {viewingSection === "data" && (
             <>
               {isLoading ? (
-                <div className="spinner-container" style={{display:'flex',alignItems:'center',justifyContent:'center'}}>
+                <div
+                  className="spinner-container"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
                   <Spinner animation="border" />
                 </div>
               ) : (
@@ -375,16 +368,13 @@ console.log(center)
                 </div>
 
                 <div id="submitbutton">
-                  <button
-                    type="submit"
-                    // onClick={fetchData}
-                    // onClick={() => {
-                    //   setQueryParams(selectedValues);
-                    // }}
-                    onClick={handleClick}
-                  >
+                  <button type="submit" onClick={handleClick}>
                     Submit
                   </button>
+                </div>
+
+                <div id="submitbutton">
+                  <button onClick={handleReset}>Reset</button>
                 </div>
               </ul>
             </>
