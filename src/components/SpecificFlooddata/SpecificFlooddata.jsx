@@ -8,7 +8,7 @@ import Draggable from "react-draggable";
 
 function SpecificFlooddata({ flooddata }) {
   const { modelArrays, setModelArrays } = useContext(dataContext);
-  const { pop, setPop } = useContext(dataContext);
+  const { pop,setPop } = useContext(dataContext);
   const handlePop = () => {
     setPop(false);
   };

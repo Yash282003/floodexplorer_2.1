@@ -9,13 +9,11 @@ import "./Navbar.css";
 
 function NavbarMenu() {
   const { sidebarOpen, setSidebarOpen } = useContext(dataContext);
-  const { startDate, setStartDate } = useContext(dataContext);
-  const { endDate, setEndDate } = useContext(dataContext);
+
   const { floodData, setFloodData } = useContext(dataContext);
 
-  const { select, setSelect } = useContext(dataContext);
-  const location = useLocation();
-  const isTwitterPage = location.pathname === "/twitter";
+  // const location = useLocation();
+  // const isTwitterPage = location.pathname === "/twitter";
 
   const handleShow = () => {
     setSidebarOpen(true);
@@ -25,8 +23,25 @@ function NavbarMenu() {
     const fileName = "download";
     console.log(floodData);
     const exportType = exportFromJSON.types.csv;
+
     exportFromJSON({ data: floodData, fileName, exportType });
   };
+  
+
+  function convertToDateGoing(dateString) {
+    if (!dateString) {
+      return ""; // Return an empty string or handle the null/undefined case accordingly
+    }
+  
+    var parts2 = dateString.split("-");
+    var day2 = parts2[2];
+    var month2 = parts2[1];
+    var year2 = parts2[0];
+    var dateObj2 = day2 + "-" + month2 + "-" + year2;
+    console.log(dateObj2);
+    return dateObj2;
+  }
+  
 
   return (
     <Navbar

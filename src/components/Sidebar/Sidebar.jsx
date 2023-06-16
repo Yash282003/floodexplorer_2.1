@@ -4,7 +4,6 @@ import "./Sidebar.css";
 import { IoCaretDownSharp } from "react-icons/io5";
 import dataContext from "../../context/datacontext";
 import SpecificFlooddata from "../SpecificFlooddata/SpecificFlooddata";
-
 import { useLocation } from "react-router-dom";
 import Spinner from "react-bootstrap/Spinner";
 
@@ -12,20 +11,19 @@ function Sidebar() {
   const { sidebarOpen, setSidebarOpen } = useContext(dataContext);
   const { startDate, setStartDate } = useContext(dataContext);
   const { endDate, setEndDate } = useContext(dataContext);
-  const [openPanel, setopenPanel] = useState(false);
-  const { select, setSelect } = useContext(dataContext);
-  const { countryData, setCountryData } = useContext(dataContext);
-  const [queryParams, setQueryParams] = useState([]);
+  const [openPanel, setopenPanel] = useState(false);           //for dropdown-menu
+  const { select, setSelect } = useContext(dataContext);    // for updating countries
+  const [queryParams, setQueryParams] = useState([]);       // for a particular chosen satellite
   const { modelArrays, setModelArrays } = useContext(dataContext);
   const { weblinksview, setWeblinksView } = useContext(dataContext);
   const { center, setCenter } = useContext(dataContext);
 
-  const [viewingSection, setViewingSection] = useState("query");
+  const [viewingSection, setViewingSection] = useState("query");   //query,data,links
   const [show, setShow] = useState(false);
-  const { floodData, setFloodData } = useContext(dataContext);
-  const [url, setUrl] = useState("");
+  const { floodData, setFloodData } = useContext(dataContext); //floodData array
+  const [url, setUrl] = useState('')
   const { selectedFlood, setSelectedFlood } = useContext(dataContext);
-  const { pop, setPop } = useContext(dataContext);
+  const { pop, setPop } = useContext(dataContext); //modal
   const [isLoading, setIsLoading] = useState(false);
 
   const Option = [
@@ -58,7 +56,7 @@ function Sidebar() {
     var dateObj2 = new Date(year2, month2, day2);
     return dateObj2;
   }
-
+//function to filter weblinks by date range
   function filterWeblinkDataByDateRange(data, sd, ed) {
     console.log(sd, ed);
     console.log(data);
@@ -76,7 +74,11 @@ function Sidebar() {
     } else {
       setWeblinksView(data);
     }
-  }
+    }
+
+  useEffect(() => {
+    console.log(weblinksview);    //?
+  }, [weblinksview]);
   useEffect(() => {
     const fetchWeblinks = async () => {
       const result = await fetch(
@@ -88,24 +90,20 @@ function Sidebar() {
     };
     fetchWeblinks();
   }, []);
+//fetching floodData
+  useEffect(()=>{
+    setUrl(`${process.env.REACT_APP_BASE_URL}/api/floods/testing8?sDate=${startDate}&eDate=${endDate}&CountryName=${select}&SatelliteName=${
+      queryParams[0] ? queryParams[0] : ""
+    }&SatelliteName1=${queryParams[1] ? queryParams[1] : ""}&SatelliteName2=${
+      queryParams[2] ? queryParams[2] : ""
+    }&SatelliteName3=${queryParams[3] ? queryParams[3] : ""}&SatelliteName4=${
+      queryParams[4] ? queryParams[4] : ""
+    }`)
+    console.log(url)
+  },[startDate,endDate,queryParams,select])
+const fetchData = async () => {
 
-  useEffect(() => {
-    setUrl(
-      `${
-        process.env.REACT_APP_BASE_URL
-      }/api/floods/testing8?sDate=${startDate}&eDate=${endDate}&CountryName=${select}&SatelliteName=${
-        queryParams[0] ? queryParams[0] : ""
-      }&SatelliteName1=${queryParams[1] ? queryParams[1] : ""}&SatelliteName2=${
-        queryParams[2] ? queryParams[2] : ""
-      }&SatelliteName3=${queryParams[3] ? queryParams[3] : ""}&SatelliteName4=${
-        queryParams[4] ? queryParams[4] : ""
-      }`
-    );
-    console.log(url);
-  }, [startDate, endDate, queryParams, select]);
-
-  const fetchData = async () => {
-    setIsLoading(true);
+setIsLoading(true);
     const data = await fetch(url);
 
     const rep = await data.json();
@@ -119,7 +117,7 @@ function Sidebar() {
       ]);
     }
     setViewingSection("data");
-    filterWeblinkDataByDateRange(weblinksview, startDate, endDate);
+    filterWeblinkDataByDateRange(weblinksview, startDate, endDate);//?
     setIsLoading(false);
   };
 
@@ -138,6 +136,10 @@ function Sidebar() {
   const handleEndDateChange = (date) => {
     setEndDate(date.target.value);
   };
+  // const handleClose1= () => {
+  //   setShow(false);
+  //   setSelectedFlood(null);
+  // };
 
   const handleShow1 = (floodName) => {
     console.log(floodName);
@@ -261,27 +263,11 @@ function Sidebar() {
                   <div className="search">
                     <span>Flood End Date:</span>
                   </div>
-                  {/* <button onClick={fetchData}>afgjhcjdjkdnjd</button> */}
+                 
                   <div className="datepicker">
                     <input type="date" onChange={handleEndDateChange} />
                   </div>
-                  {/* {floodData.map((nested) =>
-                nested.flooddata.map((element) => {
-                  return (
-                    <>
-                      <input
-                        type="checkbox"
-                        onClick={(e) => {
-                          handleGeoJSON(e);
-                        }}
-                        name={element.footprint}
-                        value={element.field1 ? element.field1 : "what"}
-                      />
-                      {element.field1} <br />
-                    </>
-                  );
-                })
-              )} */}
+                 
                 </div>
 
                 <div className="dropdown">
@@ -368,7 +354,11 @@ function Sidebar() {
                 </div>
 
                 <div id="submitbutton">
-                  <button type="submit" onClick={handleClick}>
+                  <button
+                    type="submit"
+                    
+                    onClick={handleClick}
+                  >
                     Submit
                   </button>
                 </div>
