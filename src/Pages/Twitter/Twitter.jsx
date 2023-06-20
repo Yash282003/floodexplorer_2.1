@@ -1,6 +1,5 @@
 import React from "react";
 import { useState, useContext } from "react";
-import { useEffect } from "react";
 import TweetChart from "../../components/TweetChart/TweetChart";
 import "./Twitter.css";
 import { BsTwitter } from "react-icons/bs";
@@ -10,7 +9,7 @@ import { saveAs } from "file-saver";
 
 const Twitter = () => {
   const [twitsdata, setTwitsData] = useState([]);
-  const [showData, setShowData] = useState([]);
+  const [showData, setShowData] = useState([]);      //tweets data
   const [loading, setLoading] = useState(true);
   const [plot, setPlot] = useState(false);
   const [openPanel, setopenPanel] = useState(false);

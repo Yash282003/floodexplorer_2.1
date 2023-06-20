@@ -10,7 +10,7 @@ function App() {
       <ContextProvider>
       <NavbarMenu />
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Home/>} />
         <Route path="/twitter" element={<Twitter />} />
       </Routes>
       </ContextProvider>

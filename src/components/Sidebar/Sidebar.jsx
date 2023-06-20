@@ -12,15 +12,15 @@ function Sidebar() {
   const { startDate, setStartDate } = useContext(dataContext);
   const { endDate, setEndDate } = useContext(dataContext);
   const [openPanel, setopenPanel] = useState(false);           //for dropdown-menu
-  const { select, setSelect } = useContext(dataContext);    // for updating countries
-  const [queryParams, setQueryParams] = useState([]);       // for a particular chosen satellite
+  const {select, setSelect } = useContext(dataContext);      // for updating countries
+  const [queryParams, setQueryParams] = useState([]);        // for a particular chosen satellite
   const { modelArrays, setModelArrays } = useContext(dataContext);
   const { weblinksview, setWeblinksView } = useContext(dataContext);
   const { center, setCenter } = useContext(dataContext);
 
   const [viewingSection, setViewingSection] = useState("query");   //query,data,links
   const [show, setShow] = useState(false);
-  const { floodData, setFloodData } = useContext(dataContext); //floodData array
+  const { floodData, setFloodData } = useContext(dataContext);    //floodData array
   const [url, setUrl] = useState('')
   const { selectedFlood, setSelectedFlood } = useContext(dataContext);
   const { pop, setPop } = useContext(dataContext); //modal

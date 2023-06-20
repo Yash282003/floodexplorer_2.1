@@ -36,7 +36,7 @@ function SpecificFlooddata({ flooddata }) {
               style={{ width: "45vw", height: "400px", overflowY: "auto" }}
             >
               <VscChromeClose
-                style={{ float: "right", fontSize: "25px" }}
+                style={{ float: "right", fontSize: "25px"}}
                 onClick={handlePop}
               />
               {flooddata.map((e) => {

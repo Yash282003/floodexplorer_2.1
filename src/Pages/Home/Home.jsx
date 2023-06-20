@@ -7,7 +7,7 @@ import Map from "../../components/Map/Map";
 function Home() {
   return (
     <div>
-      <Sidebar />
+      <Sidebar/>
       <Map />
     </div>
   );
